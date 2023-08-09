@@ -1,12 +1,12 @@
 
 ![](/images/Image1.png)
-<h1>A-HLS Open Patient in Epic Documentation </h1>
+<h1>A-HLS Open / Create Patient in Epic Documentation </h1>
 
 <h2>Overview</h2>
 
-The Open Patient in Epic Accelerator enables the user to open a patient’s record in the Epic EHR system from an OmniScript component in Health Cloud, with user-specified context (e.g., Scheduling, Refill). 
+The Open / Create Patient in Epic Accelerator enables the user to create a patient in Epic and then open the patient’s record in the Epic EHR system from an OmniScript component in Health Cloud, with user-specified context (e.g., Scheduling, Refill). 
 
-The Accelerator pre-populates parameters and the url suffix for the Epic API “Receive Communication” as documented here on open.epic.com (http://open.epic.com/): https://open.epic.com/Operational/ContactCenter.
+Customers should have the Patient Search R4 and Patient Create R4 FHIR APIs enabled. The Accelerator pre-populates parameters and the url suffix for the Epic API “Receive Communication” as documented here on open.epic.com (http://open.epic.com/): https://open.epic.com/Operational/ContactCenter.
 
 The Accelerator gives the user a choice of context for which to view the patient in Epic. By default, the contexts included are:
 
@@ -53,19 +53,26 @@ The Accelerator increases efficiency and improves the user experience by reducin
 
 *OmniScript (1)*
 
+* Epic Button with Create Container
 * Epic Button OmniScript
 
 *DataRaptor (2)*
 
+* GetPatientData
+* TransformForEpicButtonSearchAgain
+* EpicLinkRecordPage
+* TransformForEpicAdvancedSearch
 * GetPatientEHRId
 * GetUserIDForEHR
-* EpicReceiveCommunicationJSONTransform
+* EpicPatientSearchTransform
+* EpicPatientSearchTransform2
 
 *Integration Procedure (1)*
 
+* AuthAndSearch
+* Create Patient
 * OpenEpicPatientAndContext
-    * Type: EHRConnect
-    * SubType: EpicReceiveCommunication
+* EpicFHIRPatientSearch
 
 Images (6)
 
@@ -84,7 +91,7 @@ Static Resources - CSS (1)
 <h2>Configuration Requirements</h2>
 <h3>1. EHR Pre-Configuration Steps:</h3>
 
-* Work with your Epic Administrator in order to activate the Receive Communication API web service. If your organization is using the ReceiveCommunication2 API, the accelerator may be configured easily to call this API instead. 
+* Work with your Epic Administrator in order to activate the Patient Search R4, Patient Create R4, Receive Communication API web service. If your organization is using the ReceiveCommunication2 API, the accelerator may be configured easily to call this API instead. 
 * You may need to perform the following build steps in the Epic EHR:
 	* Computer Telephony build to enable CT capabilities
 	* Create an external ID type and assign it to your users who will be using the Accelerator
@@ -92,7 +99,7 @@ Static Resources - CSS (1)
 
 <h3>2. Salesforce Pre-Installation Steps:</h3>
 
-Ensure your Salesforce Health Cloud org has Vlocity OmniStudio or Core OmniStudio installed.
+Ensure your Salesforce Health Cloud org has Core OmniStudio installed.
 * To verify installation, please navigate to Setup > Installed Packages > OmniStudio.
 * Enable Identity Provider according to these steps: https://help.salesforce.com/s/articleView?id=sf.identity_provider_enable.htm&type=5
 
@@ -101,8 +108,7 @@ Ensure your Salesforce Health Cloud org has Vlocity OmniStudio or Core OmniStudi
 * Follow the download steps in the **"Download Now"** flow presented on the HLS Accelerators website for this Accelerator which downloads the following GitHub repository on your machine: https://hlsaccelerators.developer.salesforce.com/s/bundle/a9E5f000000PL7fEAG/open-patient-in-epic-button
 * Unzip the resulting .zip file which is downloaded to your machine. 
 * Open the **“OmniStudio”** folder
-	* If you have the Vlocity_ins package installed in your org, open the folder titled “Vlocity Version”.
-	* If you have Core OmniStudio installed in your org, open the folder titled "OmniStudio Version".
+	* Open the folder titled "OmniStudio Version".
 	* Install the DataPack into your org. 
 		* In Salesforce, click on **App Launcher** → Search for **"OmniStudio DataPacks"** and click on it.
 		* Click on **"Installed"** > Import > From File
@@ -150,7 +156,7 @@ Required SKUs:
 
 <h3>2. Configure the Accelerator:</h3>
 
-Update the **CallEpicReceiveCommunicationAPI** Integration Procedure to use the MuleSoft Direct connection instead of Epic FHIR APIs directly:
+Update the Integration Procedures to use the MuleSoft Direct connection instead of Epic FHIR APIs directly:
 
 * App Launcher > Integration Procedures > CallEpicReceiveCommunicationAPI
 	* Create a **New Version** of the Integration Procedures
@@ -158,6 +164,7 @@ Update the **CallEpicReceiveCommunicationAPI** Integration Procedure to use the 
 		* In the **Path** field, remove the “/FHIR/R4” portion of the path such that the Path = /api/AllergyIntolerance (for example)
 		* Replace **Epic_Auth_JWT** with the name of the Named Credential resulting from the MuleSoft Direct setup above (e.g. **Health_generic_system_app**)
 	* **Activate** your new Integration Procedure version
+ * Repeat for all HTTP Actions in each Integration Procedure in the package. 
 
 <h4>Configure User and Patient API Input Parameters:</h4>
 
@@ -216,6 +223,7 @@ Required SKUs:
 	* For the **HTTP Action** element, make the following changes:
 		* In the **Path** field, set it to the URL of the newly-created **MuleSoft app**.
 		* In the Named Credential field, Replace **Epic_Auth_JWT** with the newly created **Named Credential** for your **MuleSoft app**
+  * Repeat the above for all HTTP Actions in each Integration Procedure in the package. 
 
 <h4>Configure User and Patient API Input Parameters:</h4>
 
@@ -326,6 +334,7 @@ Required SKUs:
 	* For the **HTTP Action** element, make the following changes:
 		* In the **Path** field, add your organization’s unique API domain name before the existing text. For example: https://**interconnect.makanahealth.com**/wcf/Epic.Common.GeneratedServices/Utility.svc/rest_2015/ReceiveCommunication
 		* Add any additional Input Keys and Values according to your organization’s requirements (e.g., authentication keys). Work with your Epic administrator to determine additional needs.
+  * Repeat the above for all HTTP Actions for each Integration Procedure in the package.
 
 ![](/images/image8.png)
 <h4>Configure User and Patient API Input Parameters:</h4>
