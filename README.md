@@ -103,7 +103,7 @@ Ensure your Salesforce Health Cloud org has Core OmniStudio installed.
 * To verify installation, please navigate to Setup > Installed Packages > OmniStudio.
 * Enable Identity Provider according to these steps: https://help.salesforce.com/s/articleView?id=sf.identity_provider_enable.htm&type=5
 
-<h3>2. Install the Data Pack:</h3>
+<h3>3. Install the Data Pack:</h3>
 
 * Follow the download steps in the **"Download Now"** flow presented on the HLS Accelerators website for this Accelerator which downloads the following GitHub repository on your machine: https://hlsaccelerators.developer.salesforce.com/s/bundle/a9E5f000000PL7fEAG/open-patient-in-epic-button
 * Unzip the resulting .zip file which is downloaded to your machine. 
@@ -116,7 +116,7 @@ Ensure your Salesforce Health Cloud org has Core OmniStudio installed.
 		* When prompted, click **"Activate Now"**.
 
 
-<h3>3. Post-Installation Steps:</h3>
+<h3>4. Post-Installation Steps:</h3>
 
 <h4>Add buttonStyles.css to Static Resources:</h4>
 
@@ -126,7 +126,7 @@ Ensure your Salesforce Health Cloud org has Core OmniStudio installed.
 4. Set the resource to **Public**
 5. **Save** the Static Resource
 
-<h3>4. Integration Setup</h3>
+<h3>5. Integration Setup</h3>
 There are 3 different ways to configure this accelerator based on your organization's integration strategy. Click on the links below to be taken to the appropriate instructions for your architecture:
 
 * [MuleSoft Direct](#MuleSoft-Direct)
